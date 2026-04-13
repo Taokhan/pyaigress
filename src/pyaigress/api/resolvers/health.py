@@ -10,7 +10,7 @@ router = APIRouter(prefix="/health", tags=["health"])
 async def health():
     async with engine.connect() as conn:
         await conn.execute(text("SELECT 1"))
-        
+
     try:
         models = ollama.list()
         ollama_status = "connected"
