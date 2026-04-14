@@ -17,8 +17,8 @@ async def lifespan(app: FastAPI):
             raise RuntimeError("pgvector extension is not enabled. Run: CREATE EXTENSION vector;")
         await conn.run_sync(Base.metadata.create_all)
         print("✅ Tables ready")
-    yield  # app runs here
-    # anything after yield runs on shutdown
+    yield
+
     await engine.dispose()
     print("🛑 Shutdown complete")
 

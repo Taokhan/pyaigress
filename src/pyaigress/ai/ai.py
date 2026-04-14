@@ -11,36 +11,29 @@ def embed(text: str) -> list[float]:
     return response["embedding"]
 
 
-def chat(message: str, system: str = None, model: str = "mistral") -> str:
+def chat(message: str, system: str = None, model: str = "mistral", history: list = []) -> str:
     resolved_model = MODEL_MAP.get(model, model)
 
     messages = []
     if system:
         messages.append({"role": "system", "content": system})
 
+    messages.extend(history)
     messages.append({"role": "user", "content": message})
 
-    response = ollama.chat(
-        model=resolved_model,
-        messages=messages
-    )
-
+    response = ollama.chat(model=resolved_model, messages=messages)
     return response["message"]["content"]
 
-def chat_stream(message: str, system: str = None, model: str = "mistral") -> Generator:
+def chat_stream(message: str, system: str = None, model: str = "mistral", history: list = []):
     resolved_model = MODEL_MAP.get(model, model)
 
     messages = []
     if system:
         messages.append({"role": "system", "content": system})
+    messages.extend(history)
     messages.append({"role": "user", "content": message})
 
-    stream = ollama.chat(
-        model=resolved_model,
-        messages=messages,
-        stream=True
-    )
-
+    stream = ollama.chat(model=resolved_model, messages=messages, stream=True)
     for chunk in stream:
         yield chunk["message"]["content"]
 

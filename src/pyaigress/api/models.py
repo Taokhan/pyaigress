@@ -8,6 +8,7 @@ MODEL_MAP = {
 class AiTest(BaseModel):
     text: str
     model: str
+    session_id: str
 
     @field_validator("model")
     @classmethod
