@@ -5,10 +5,11 @@ MODEL_MAP = {
     "nomic": "nomic-embed-text",
 }
 
-class AiTest(BaseModel):
+class ChatRequest(BaseModel):
     text: str
-    model: str
+    model: str = "mistral"
     session_id: str
+    mode: str = "auto"
 
     @field_validator("model")
     @classmethod

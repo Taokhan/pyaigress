@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
 from pyaigress.ai.ai import chat, chat_stream
-from pyaigress.api.models import AiTest
+from pyaigress.api.models import ChatRequest
 from typing import AsyncGenerator
 from pyaigress.database.database import get_db
 from pyaigress.database.memory import clear_session, get_recent_messages, save_message
@@ -12,7 +12,7 @@ router = APIRouter(prefix="/chat", tags=["chat"])
 
 
 @router.post("")
-async def chat_endpoint(req: AiTest, db: AsyncSession = Depends(get_db)):
+async def chat_endpoint(req: ChatRequest, db: AsyncSession = Depends(get_db)):
     history = await get_recent_messages(db, req.session_id)
     messages = [{"role": m.role, "content": m.content} for m in history]
 
@@ -25,7 +25,7 @@ async def chat_endpoint(req: AiTest, db: AsyncSession = Depends(get_db)):
 
 
 @router.post("/stream")
-async def chat_stream_endpoint(req: AiTest, db: AsyncSession = Depends(get_db)):
+async def chat_stream_endpoint(req: ChatRequest, db: AsyncSession = Depends(get_db)):
     history = await get_recent_messages(db, req.session_id)
     messages = [{"role": m.role, "content": m.content} for m in history]
     await save_message(db, req.session_id, "user", req.text)

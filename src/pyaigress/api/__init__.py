@@ -3,7 +3,7 @@ from fastapi import FastAPI, APIRouter
 from sqlalchemy import text
 from pyaigress.database.database import engine, Base
 import pyaigress.database.models.models
-from pyaigress.api.resolvers import chat, health
+from pyaigress.api.resolvers import chat, health, sessions
 
 
 
@@ -26,3 +26,4 @@ async def lifespan(app: FastAPI):
 api_router = APIRouter()
 api_router.include_router(health.router)
 api_router.include_router(chat.router)
+api_router.include_router(sessions.router)
